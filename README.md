@@ -57,29 +57,38 @@ For small data such as capture size of 32 Mbytes on ASA/FTD, mostly this will be
 
 # Script Usage
 
-root@rajat-virtual-machine:/home/rajat/myscripts# ./dup_packets.sh 
+root# ./dup_packets.sh 
 
 For pcap Usage: ./dup_packets.sh <pcap> <filename or path>
+
 For text Usage: ./dup_packets.sh <text> <filename or path>
+
 Example for pcap: ./dup_packets.sh pcap abc.pcap
+
 Example for text: ./dup_packets.sh text abc.txt
+
 Text file will be output of /show capture capname detail/ from ASA/FTD
 
 **Example with PCAP file when looping packets are found**
 
-root@rajat-virtual-machine:/home/rajat/myscripts# ./dup_packets.sh pcap capi.pcap
+root# ./dup_packets.sh pcap capi.pcap
+
 Running as user "root" and group "root". This could be dangerous.
 
 Potential duplicate packets
+
 Count	Source IP	   Destination IP	IP Identification
+
 5825	192.168.0.2<------>192.168.0.1-----------0x0000463c
 
 **Example with PCAP file when looping packets are not found**
 
-oot@rajat-virtual-machine:/home/rajat/myscripts# ./dup_packets.sh pcap telnetsample.pcap
+root# ./dup_packets.sh pcap telnetsample.pcap
+
 Running as user "root" and group "root". This could be dangerous.
 
 Potential duplicate packets
+
 Count	Source IP	   Destination IP	IP Identification
 
 No looping packets found
@@ -87,16 +96,18 @@ No looping packets found
 
 **Example with text file when looping packets are found**
 
-root@rajat-virtual-machine:/home/rajat/myscripts# ./dup_packets.sh text loop.text
+root# ./dup_packets.sh text loop.text
 
 Potential duplicate packets
+
 Count	Source IP	   Destination IP	IP Identification
+
 5652	192.168.0.2----------192.168.0.1<--------->17980
 
 
 **Example with text file when looping packets are not found**
 
-root@rajat-virtual-machine:/home/rajat/myscripts# ./dup_packets.sh text udpfrag.text
+root# ./dup_packets.sh text udpfrag.text
 
 No Looping Packets Found
 
@@ -110,35 +121,57 @@ However this script provides an interesting example of how to reason about the p
 For large text size, script scales well as awk is doing line by line processing and no significant CPU/Memory overhead. Around 1.3 Gbytes text capture, it takes 15 seconds with 19 Mbytes peak RSS, CPU usage
 of 99%.
 
-root@rajat-virtual-machine:/home/rajat/myscripts# /usr/bin/time --verbose ./dup_packets.sh text loop2.text
+root# /usr/bin/time --verbose ./dup_packets.sh text loop2.text
 
 Potential duplicate packets
 Count	Source IP	   Destination IP	IP Identification
 5256360	192.168.0.2----------192.168.0.1<--------->17980
 	Command being timed: "./dup_packets.sh text loop2.text"
-	User time (seconds): 14.76
-	System time (seconds): 0.78
-	**Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.54**
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
-	**Maximum resident set size (kbytes): 19220**
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 5897
-	Voluntary context switches: 8
-	Involuntary context switches: 50
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
-root@rajat-virtual-machine:/home/rajat/myscripts# ls -lh loop2.text 
+	
+`	User time (seconds): 14.76
+	
+ 	System time (seconds): 0.78
+	
+ 	**Percent of CPU this job got: 99%
+	
+ 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.54**
+	
+ 	Average shared text size (kbytes): 0
+	
+ 	Average unshared data size (kbytes): 0
+	
+ 	Average stack size (kbytes): 0
+	
+ 	Average total size (kbytes): 0
+	
+ 	**Maximum resident set size (kbytes): 19220**
+	
+ 	Average resident set size (kbytes): 0
+	
+ 	Major (requiring I/O) page faults: 0
+	
+ 	Minor (reclaiming a frame) page faults: 5897
+	
+ 	Voluntary context switches: 8
+	
+ 	Involuntary context switches: 50
+	
+ 	Swaps: 0
+	
+ 	File system inputs: 0
+	
+ 	File system outputs: 0
+	
+ 	Socket messages sent: 0
+	
+ 	Socket messages received: 0
+	
+ 	Signals delivered: 0
+	
+ 	Page size (bytes): 4096
+	
+ 	Exit status: 0
+root# ls -lh loop2.text 
 **-rw-r--r-- 1 root root 1,3G sty  6 16:45 loop2.text**
 
 
@@ -146,84 +179,138 @@ However for large PCAP files, it becomes really slow, for 300 Mbytes PCAP file, 
 
 
 
-root@rajat-virtual-machine:/home/rajat/myscripts# /usr/bin/time --verbose ./dup_packets.sh pcap 300Mbfile.pcap
+root# /usr/bin/time --verbose ./dup_packets.sh pcap 300Mbfile.pcap
+
 Running as user "root" and group "root". This could be dangerous.
 
 Potential duplicate packets
-Count	Source IP	   Destination IP	IP Identification
-41	192.168.1.38<------>192.168.1.1-----------0x00007dea
-	Command being timed: "./dup_packets.sh pcap 300Mbfile.pcap"
-	User time (seconds): 148.47
-	System time (seconds): 2.38
-      **Percent of CPU this job got: 104%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:24.51**
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
-      **Maximum resident set size (kbytes): 656704**
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 161794
-	Voluntary context switches: 41476
-	Involuntary context switches: 16688
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
 
-root@rajat-virtual-machine:/home/rajat/myscripts# ls -lh | grep 300
+Count	Source IP	   Destination IP	IP Identification
+
+41	192.168.1.38<------>192.168.1.1-----------0x00007dea
+	
+ 	Command being timed: "./dup_packets.sh pcap 300Mbfile.pcap"
+	
+ 	User time (seconds): 148.47
+	
+ 	System time (seconds): 2.38
+      
+	**Percent of CPU this job got: 104%**
+	
+ 	**Elapsed (wall clock) time (h:mm:ss or m:ss): 2:24.51**
+		
+  	Average shared text size (kbytes): 0
+	
+ 	Average unshared data size (kbytes): 0
+	
+ 	Average stack size (kbytes): 0
+	
+ 	Average total size (kbytes): 0
+      
+      **Maximum resident set size (kbytes): 656704**
+	
+ 	Average resident set size (kbytes): 0
+	
+ 	Major (requiring I/O) page faults: 0
+	
+ 	Minor (reclaiming a frame) page faults: 161794
+	
+ 	Voluntary context switches: 41476
+	
+ 	Involuntary context switches: 16688
+	
+ 	Swaps: 0
+	
+ 	File system inputs: 0
+	
+ 	File system outputs: 0
+	
+ 	Socket messages sent: 0
+	
+ 	Socket messages received: 0
+	
+ 	Signals delivered: 0
+	
+ 	Page size (bytes): 4096
+	
+ 	Exit status: 0
+
+root# ls -lh | grep 300
 **-rw-r--r-- 1 tcpdump tcpdump 307M sty  6 16:13 300Mbfile.pcap**
 
 Checking top and "ps aux" max time is spent with tshark command.
 
-root@rajat-virtual-machine:/home/rajat# ps aux | awk '/tshark/{print $3,$6}'
+root# ps aux | awk '/tshark/{print $3,$6}'
+
 98.0 514156
+
 0.0 980
-root@rajat-virtual-machine:/home/rajat# ps aux | grep tshark
+
+root@# ps aux | grep tshark
 **root      204710 98.4  1.8 1156284 528676 pts/0  R+   12:18   1:29 tshark -r 300Mbfile.pcap -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf**
-root      204815  0.0  0.0  11776   724 pts/2    S+   12:20   0:00 grep --color=auto tshark
 
 Memory usage of tshark is growing with file-size which is kind of expected, however CPU usage and runtime is the main issue. This job is CPU bound and it
+
 hogs the CPU at 100% for around more than 2 minutes in example above.
 
 It will become really bad with even larger file size, test result will around 2 Gbytes file, it took 14 minutes 54 seconds, 221 Mbytes of max RSS with one CPU at 100% constantly.
 
 
-root@rajat-virtual-machine:/home/rajat/myscripts# /usr/bin/time --verbose ./dup_packets.sh pcap bigfile.pcap
+root# /usr/bin/time --verbose ./dup_packets.sh pcap bigfile.pcap
+
 Running as user "root" and group "root". This could be dangerous.
 
 Potential duplicate packets
 Count	Source IP	   Destination IP	IP Identification
 245	192.168.1.38<------>192.168.1.1-----------0x000067d2
-	Command being timed: "./dup_packets.sh pcap bigfile.pcap"
-	User time (seconds): 916.42
-	System time (seconds): 12.16
+	
+ 	Command being timed: "./dup_packets.sh pcap bigfile.pcap"
+	
+ 	User time (seconds): 916.42
+	
+ 	System time (seconds): 12.16
+      
       **Percent of CPU this job got: 103%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 14:54.37**
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
+	
+ 	Elapsed (wall clock) time (h:mm:ss or m:ss): 14:54.37**
+	
+ 	Average shared text size (kbytes): 0
+	
+ 	Average unshared data size (kbytes): 0
+	
+ 	Average stack size (kbytes): 0
+	
+ 	Average total size (kbytes): 0
+      
       **Maximum resident set size (kbytes): 2210872**
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 550244
-	Voluntary context switches: 257568
-	Involuntary context switches: 109790
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
-root@rajat-virtual-machine:/home/rajat/myscripts# ls -lh bigfile.pcap 
+	
+ 	Average resident set size (kbytes): 0
+	
+ 	Major (requiring I/O) page faults: 0
+	
+ 	Minor (reclaiming a frame) page faults: 550244
+	
+ 	Voluntary context switches: 257568
+	
+ 	Involuntary context switches: 109790
+	
+ 	Swaps: 0
+	
+ 	File system inputs: 0
+	
+ 	File system outputs: 0
+	
+ 	Socket messages sent: 0
+	
+ 	Socket messages received: 0
+	
+ 	Signals delivered: 0
+	
+ 	Page size (bytes): 4096
+	
+ 	Exit status: 0
+  
+root# ls -lh bigfile.pcap 
 **-rw-r--r-- 1 tcpdump tcpdump 1,9G sty  6 15:30 bigfile.pcap**
 
 
@@ -234,53 +321,88 @@ and run Tshark on multiple CPUs. The order in which data is sent to awk is not i
 
 In the second version of the script if the PCAP file is more than around 100Mbytes, it is broken into 4 chunks and these are processed by tshark in parallel on 4 CPUs.
 
-For the same file with parallel version of script, it took 8 minutes 25 seconds, almost half time to finish, with max RSS of 833*4 Mbytes of RSS RAM. There is around 1Gbytes
-of additional RAM used in parallel version as most likely there is some duplicate data in memory, since there are four tshark loaded in memory, best would have been if tshark 
-supported threads then this overhead can be avoided. However more importantly runtime is almost half. This can be further reduced if file is broken into more chunks and more CPUs are allocated.
+For the same file with parallel version of script, it took 8 minutes 25 seconds, almost half time to finish, with max RSS of 833*4 Mbytes of RSS RAM. There is around 1Gbytesof additional RAM used in parallel version as most likely there is some duplicate data in memory, since there are four tshark loaded in memory, best would have been if tshark  supported threads then this overhead can be avoided. However more importantly runtime is almost half. This can be further reduced if file is broken into more chunks and more CPUs are allocated.
 
 
-root@rajat-virtual-machine:/home/rajat/myscripts# /usr/bin/time --verbose ./mcpudup_packets.sh pcap bigfile.pcap
+root# /usr/bin/time --verbose ./mcpudup_packets.sh pcap bigfile.pcap
+
 reading from file bigfile.pcap, link-type EN10MB (Ethernet)
+
 Running as user "root" and group "root". This could be dangerous.
+
 Running as user "root" and group "root". This could be dangerous.
+
 Running as user "root" and group "root". This could be dangerous.
+
 Running as user "root" and group "root". This could be dangerous.
+
 Running as user "root" and group "root". This could be dangerous.
 
 Potential duplicate packets
 Count	Source IP	   Destination IP	IP Identification
 245	192.168.1.38<------>192.168.1.1-----------0x000067d2
-	Command being timed: "./mcpudup_packets.sh pcap bigfile.pcap"
-	User time (seconds): 1706.50
-	System time (seconds): 63.87
+	
+     	Command being timed: "./mcpudup_packets.sh pcap bigfile.pcap"
+	
+ 	User time (seconds): 1706.50
+	
+ 	System time (seconds): 63.87
+      
       **Percent of CPU this job got: 350%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 8:25.41**
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
+	
+ 	Elapsed (wall clock) time (h:mm:ss or m:ss): 8:25.41**
+	
+ 	Average shared text size (kbytes): 0
+	
+ 	Average unshared data size (kbytes): 0
+	
+ 	Average stack size (kbytes): 0
+	
+ 	Average total size (kbytes): 0
+      
       **Maximum resident set size (kbytes): 836256**
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 103
-	Minor (reclaiming a frame) page faults: 853173
-	Voluntary context switches: 259975
-	Involuntary context switches: 161068
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 9891984
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
+	
+ 	Average resident set size (kbytes): 0
+	
+ 	Major (requiring I/O) page faults: 103
+	
+ 	Minor (reclaiming a frame) page faults: 853173
+	
+ 	Voluntary context switches: 259975
+	
+ 	Involuntary context switches: 161068
+	
+ 	Swaps: 0
+	
+ 	File system inputs: 0
+	
+ 	File system outputs: 9891984
+	
+ 	Socket messages sent: 0
+	
+ 	Socket messages received: 0
+	
+ 	Signals delivered: 0
+	
+ 	Page size (bytes): 4096
+	
+ 	Exit status: 0
+
+	
 
 
 root@rajat-virtual-machine:/home/rajat/myscripts# ps aux | grep tshark
+
 root      204917  0.0  0.0  28248 18088 pts/0    S+   12:47   0:00 perl /usr/bin/parallel -j 4 tshark -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf -r {}
+
 root      204934 99.9  2.7 1402164 775916 pts/0  R    12:47   6:05 tshark -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf -r temp.1736336830.PCAP
+
 root      204935 99.9  2.6 1525040 772800 pts/0  R    12:47   6:05 tshark -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf -r temp.1736336830.PCAP1
+
 root      204936 99.9  2.6 1393968 768320 pts/0  R    12:47   6:05 tshark -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf -r temp.1736336830.PCAP2
+
 root      204937 99.9  2.6 1460004 769364 pts/0  R    12:47   6:05 tshark -T fields -e ip.src -e ip.dst -e ip.id -e ip.flags.mf -r temp.1736336830.PCAP3
+
 root      205054  0.0  0.0  11776   720 pts/2    S+   12:54   0:00 grep --color=auto tshark
  
 
