@@ -71,13 +71,18 @@ Text file will be output of /show capture capname detail/ from ASA/FTD
 
 **Example with PCAP file when looping packets are found**
 
+
 root# ./dup_packets.sh pcap capi.pcap
+
 
 Running as user "root" and group "root". This could be dangerous.
 
+
 Potential duplicate packets
 
+
 Count	Source IP	   Destination IP	IP Identification
+
 
 5825	192.168.0.2<------>192.168.0.1-----------0x0000463c
 
@@ -85,11 +90,15 @@ Count	Source IP	   Destination IP	IP Identification
 
 root# ./dup_packets.sh pcap telnetsample.pcap
 
+
 Running as user "root" and group "root". This could be dangerous.
+
 
 Potential duplicate packets
 
+
 Count	Source IP	   Destination IP	IP Identification
+
 
 No looping packets found
 
@@ -102,12 +111,14 @@ Potential duplicate packets
 
 Count	Source IP	   Destination IP	IP Identification
 
+
 5652	192.168.0.2----------192.168.0.1<--------->17980
 
 
 **Example with text file when looping packets are not found**
 
 root# ./dup_packets.sh text udpfrag.text
+
 
 No Looping Packets Found
 
@@ -124,9 +135,12 @@ of 99%.
 root# /usr/bin/time --verbose ./dup_packets.sh text loop2.text
 
 Potential duplicate packets
+
 Count	Source IP	   Destination IP	IP Identification
+
 5256360	192.168.0.2----------192.168.0.1<--------->17980
-	Command being timed: "./dup_packets.sh text loop2.text"
+
+ Command being timed: "./dup_packets.sh text loop2.text"
 	
 `	User time (seconds): 14.76
 	
@@ -189,7 +203,8 @@ Count	Source IP	   Destination IP	IP Identification
 
 41	192.168.1.38<------>192.168.1.1-----------0x00007dea
 	
- 	Command being timed: "./dup_packets.sh pcap 300Mbfile.pcap"
+ 	
+  	Command being timed: "./dup_packets.sh pcap 300Mbfile.pcap"
 	
  	User time (seconds): 148.47
 	
