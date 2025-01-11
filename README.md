@@ -24,14 +24,19 @@ Additionally following is not considered:
 1. Packets with IP-ID of all 0's. Some implementation use all zeros in IP-ID.
 
    e.g as seen on ASA, show capture capname detail
-    1: 23:24:22.526431 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 139
-    10.0.3.4.10000 > 10.0.3.6.2123:  [bad udp cksum d16b!] udp 97 (DF) (ttl 64, id 0)
+
+   1: 23:24:22.526431 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 139
+
+   10.0.3.4.10000 > 10.0.3.6.2123:  [bad udp cksum d16b!] udp 97 (DF) (ttl 64, id 0)
 
 With tshark
 
    root@rajat-virtual-machine:/home/rajat/myscripts# tshark -r id0.pcap -T fields -e ip.src -e ip.dst -e ip.id
+   
    Running as user "root" and group "root". This could be dangerous.
+   
    10.0.3.4	10.0.0.105	0x00000000
+   
    10.0.0.105	10.0.3.4	0x00000000
 	
 
@@ -39,16 +44,22 @@ With tshark
    e.g
    1: 11:05:29.907301 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38.1027 > 4.2.2.2.8000:  [bad udp cksum 5b10!] udp 9000 (frag 218:1480@0+) (ttl 64) 
+
    2: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38 > 4.2.2.2  (frag 218:1480@1480+) (ttl 64) 
+
    3: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38 > 4.2.2.2  (frag 218:1480@2960+) (ttl 64) 
+
    4: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38 > 4.2.2.2  (frag 218:1480@4440+) (ttl 64) 
+
    5: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38 > 4.2.2.2  (frag 218:1480@5920+) (ttl 64) 
+
    6: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 1514
       192.168.1.38 > 4.2.2.2  (frag 218:1480@7400+) (ttl 64) 
+
    7: 11:05:29.907316 0050.568d.992b 0050.568d.c0e2 0x0800 Length: 162
       192.168.1.38 > 4.2.2.2  (frag 218:128@8880) (ttl 64) 
 
