@@ -1,5 +1,5 @@
 #!/bin/bash
-# version 2
+# version 3
 # This is a script to detect duplicate IPv4 packets from pcap files or
 # "show capture capname detail" output from ASA/FTD.
 
@@ -51,8 +51,8 @@ pcap)
             }
         }
         END {
-            printf "\n%s\n", "Potential duplicate packets"
-            printf "%s\t%s\t   %s\t%s\n", "Count", "Source IP", "Destination IP", "IP Identification"
+            printf "\n%-8s %-15s %-15s %-18s\n", "Count", "Source IP", "Destination IP", "IP Identification"
+            printf "%-8s %-15s %-15s %-18s\n", "-----", "---------------", "---------------", "------------------"
 
             counter = 0
             for (x in a) {
@@ -60,16 +60,16 @@ pcap)
                     # x is "src<------>dst-----------id"
                     split(x, parts, "-----------")
                     split(parts[1], sd, "<------>")
-                    src = sd[1]
-                    dst = sd[2]
+                    src  = sd[1]
+                    dst  = sd[2]
                     ipid = parts[2]
-                    printf "%d\t%s\t%s\t%s\n", a[x], src, dst, ipid
+                    printf "%-8d %-15s %-15s %-18s\n", a[x], src, dst, ipid
                     counter++
                 }
             }
 
             if (counter == 0) {
-                printf "\n%s\n", "No looping packets found"
+                printf "\nNo looping packets found\n"
             }
         }'
     ;;
@@ -100,10 +100,10 @@ text)
             $0 = str1
             # Now fields are: src1 src2 src3 src4 <----> dst1 dst2 dst3 dst4 ----- id
             # We rebuild: "src----------dst<--------->id"
-            src = $1"."$2"."$3"."$4
-            dst = $7"."$8"."$9"."$10
+            src  = $1"."$2"."$3"."$4
+            dst  = $7"."$8"."$9"."$10
             ipid = $NF
-            key = src "----------" dst "<--------->" ipid
+            key  = src "----------" dst "<--------->" ipid
 
             a[key]++
             num_iter++
@@ -111,12 +111,12 @@ text)
 
         END {
             if (num_iter == 0) {
-                printf "\n%s\n", "No Looping Packets Found"
+                printf "\nNo Looping Packets Found\n"
                 exit
             }
 
-            printf "\n%s\n", "Potential duplicate packets"
-            printf "%s\t%s\t   %s\t%s\n", "Count", "Source IP", "Destination IP", "IP Identification"
+            printf "\n%-8s %-15s %-15s %-18s\n", "Count", "Source IP", "Destination IP", "IP Identification"
+            printf "%-8s %-15s %-15s %-18s\n", "-----", "---------------", "---------------", "------------------"
 
             counter = 0
             for (x in a) {
@@ -127,13 +127,13 @@ text)
                     split(parts[1], sd, "----------")
                     src = sd[1]
                     dst = sd[2]
-                    printf "%d\t%s\t%s\t%s\n", a[x], src, dst, ipid
+                    printf "%-8d %-15s %-15s %-18s\n", a[x], src, dst, ipid
                     counter++
                 }
             }
 
             if (counter == 0) {
-                printf "\n%s\n", "No looping packets found"
+                printf "\nNo looping packets found\n"
             }
         }' "$filename"
     ;;
